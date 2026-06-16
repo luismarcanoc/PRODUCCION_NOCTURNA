@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PRODUCCION NOCTURNA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="brand-corner" aria-hidden="true">
+      <img src="logopandetata.png" alt="" class="brand-corner__logo" />
+    </div>
+
+    <header class="topbar">
+      <p class="eyebrow">Panel de formularios</p>
+      <h1>PRODUCCION NOCTURNA</h1>
+      <p class="topbar__subtitle">Selecciona el modulo que necesitas para gestionar la operacion diaria.</p>
+    </header>
+
+    <main class="main">
+      <div id="env-warning" class="alert alert--warn hidden">
+        Configura la URL del Apps Script en index.html para habilitar guardado en Google Sheets.
+      </div>
+
+      <section class="view active" data-view="home">
+        <div class="modules-grid">
+          <article class="module-card">
+            <button class="module-big-btn" data-view-target="recetas">RECETAS</button>
+          </article>
+          <article class="module-card">
+            <button class="module-big-btn" data-view-target="entregado">ENTREGADO</button>
+          </article>
+          <article class="module-card">
+            <button class="module-big-btn" data-view-target="merma">MERMA</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" data-view="recetas">
+        <div class="section-head">
+          <h2>Formulario RECETAS</h2>
+          <div class="section-head__actions">
+            <button id="sync-catalogs" type="button" class="btn btn--ghost">Sincronizar catalogos</button>
+            <button type="button" class="btn btn--ghost" data-view-target="home">Volver al menu</button>
+          </div>
+        </div>
+
+        <form id="recetas-form" class="card">
+          <div class="form-grid">
+            <label>
+              <span>Fecha</span>
+              <input type="date" name="fecha" required />
+            </label>
+
+            <label>
+              <span>Responsable</span>
+              <input type="text" name="responsable" placeholder="Nombre y apellido" required />
+            </label>
+          </div>
+
+          <div class="items-card">
+            <h3>Agregar productos al envio</h3>
+            <div class="line-grid">
+              <label>
+                <span>Producto</span>
+                <input type="text" id="receta-item-producto-select" list="receta-item-producto-list" placeholder="Buscar producto por codigo o nombre" autocomplete="off" />
+                <datalist id="receta-item-producto-list"></datalist>
+              </label>
+
+              <label>
+                <span>Receta (de RECETAS)</span>
+                <select id="receta-item-receta-select">
+                  <option value="" selected disabled>Selecciona receta</option>
+                </select>
+              </label>
+
+              <button id="add-receta-item" type="button" class="btn btn--ghost line-grid__button">Agregar producto</button>
+            </div>
+
+            <p id="recetas-items-empty" class="items-empty">Todavia no agregaste productos al envio.</p>
+
+            <div class="items-table-wrap hidden" id="recetas-items-wrap">
+              <table class="items-table" id="recetas-items-table">
+                <thead>
+                  <tr>
+                    <th>Codigo</th>
+                    <th>Producto</th>
+                    <th>Unidad</th>
+                    <th>Receta</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="recetas-items-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn">Guardar registro</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="view" data-view="entregado">
+        <div class="section-head">
+          <h2>Formulario ENTREGADO</h2>
+          <div class="section-head__actions">
+            <button id="sync-catalogs-entregado" type="button" class="btn btn--ghost">Sincronizar catalogos</button>
+            <button type="button" class="btn btn--ghost" data-view-target="home">Volver al menu</button>
+          </div>
+        </div>
+
+        <form id="entregado-form" class="card">
+          <div class="form-grid">
+            <label>
+              <span>Fecha</span>
+              <input type="date" name="fecha" required />
+            </label>
+
+            <label>
+              <span>Responsable</span>
+              <input type="text" name="responsable" placeholder="Nombre y apellido" required />
+            </label>
+          </div>
+
+          <div class="items-card">
+            <h3>Agregar productos al envio</h3>
+            <div class="line-grid line-grid--entregado">
+              <label>
+                <span>Producto</span>
+                <input type="text" id="entregado-item-producto-select" list="entregado-item-producto-list" placeholder="Buscar producto por codigo o nombre" autocomplete="off" />
+                <datalist id="entregado-item-producto-list"></datalist>
+              </label>
+
+              <label>
+                <span>Cantidad</span>
+                <input id="entregado-item-cantidad" type="number" min="1" step="1" placeholder="0" />
+              </label>
+
+              <label>
+                <span>Destino</span>
+                <select id="entregado-item-destino-select">
+                  <option value="" selected disabled>Selecciona destino</option>
+                </select>
+              </label>
+
+              <button id="add-entregado-item" type="button" class="btn btn--ghost line-grid__button">Agregar producto</button>
+            </div>
+
+            <p id="entregado-items-empty" class="items-empty">Todavia no agregaste productos al envio.</p>
+
+            <div class="items-table-wrap hidden" id="entregado-items-wrap">
+              <table class="items-table" id="entregado-items-table">
+                <thead>
+                  <tr>
+                    <th>Codigo</th>
+                    <th>Producto</th>
+                    <th>Unidad</th>
+                    <th>Cantidad</th>
+                    <th>Destino</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="entregado-items-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn">Guardar entregado</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="view" data-view="merma">
+        <div class="section-head">
+          <h2>Formulario MERMA</h2>
+          <div class="section-head__actions">
+            <button id="sync-catalogs-merma" type="button" class="btn btn--ghost">Sincronizar catalogos</button>
+            <button type="button" class="btn btn--ghost" data-view-target="home">Volver al menu</button>
+          </div>
+        </div>
+
+        <form id="merma-form" class="card">
+          <div class="form-grid">
+            <label>
+              <span>Fecha</span>
+              <input type="date" name="fecha" required />
+            </label>
+
+            <label>
+              <span>Responsable</span>
+              <input type="text" name="responsable" placeholder="Nombre y apellido" required />
+            </label>
+          </div>
+
+          <div class="items-card">
+            <h3>Agregar productos al envio</h3>
+            <div class="line-grid line-grid--entregado">
+              <label>
+                <span>Producto</span>
+                <input type="text" id="merma-item-producto-select" list="merma-item-producto-list" placeholder="Buscar producto por codigo o nombre" autocomplete="off" />
+                <datalist id="merma-item-producto-list"></datalist>
+              </label>
+
+              <label>
+                <span>Cantidad</span>
+                <input id="merma-item-cantidad" type="number" min="1" step="1" placeholder="0" />
+              </label>
+
+              <label>
+                <span>Motivo de la Merma</span>
+                <select id="merma-item-motivo-select">
+                  <option value="" selected disabled>Selecciona motivo</option>
+                </select>
+              </label>
+
+              <button id="add-merma-item" type="button" class="btn btn--ghost line-grid__button">Agregar producto</button>
+            </div>
+
+            <p id="merma-items-empty" class="items-empty">Todavia no agregaste productos al envio.</p>
+
+            <div class="items-table-wrap hidden" id="merma-items-wrap">
+              <table class="items-table" id="merma-items-table">
+                <thead>
+                  <tr>
+                    <th>Codigo</th>
+                    <th>Producto</th>
+                    <th>Unidad</th>
+                    <th>Cantidad</th>
+                    <th>Motivo de la Merma</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="merma-items-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn">Guardar merma</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <div id="standby-overlay" class="standby-overlay hidden" aria-live="assertive" aria-busy="true" role="status">
+      <div class="standby-panel">
+        <div class="standby-spinner" aria-hidden="true"></div>
+        <p id="standby-message">Cargando...</p>
+        <small>No cierres esta pagina hasta que termine el envio.</small>
+      </div>
+    </div>
+
+    <script>
+      window.APPS_SCRIPT_URL = '';
+    </script>
+    <script src="script.js" defer></script>
+  </body>
+</html>
